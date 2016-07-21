@@ -1,3 +1,4 @@
+// dotplotter provides utilities for creating simple images from 2D coordinates.
 package dotplotter
 
 import (
