@@ -9,7 +9,8 @@ import (
 	"path/filepath"
 )
 
-func defaultColor(c string) color.RGBA {
+// DefaultColor exports default RGB values for common colors.
+func DefaultColor(c string) color.RGBA {
 	m := map[string]color.RGBA{
 		"white":  color.RGBA{255, 255, 255, 255},
 		"black":  color.RGBA{0, 0, 0, 255},
@@ -27,16 +28,19 @@ func defaultColor(c string) color.RGBA {
 	return r
 }
 
+// modelRectangle holds the corners of a canvas in model-space.
 type modelRectangle struct {
 	tl, br [2]float64
 }
 
+// canvas holds an image reference, a description of the model space, and constants to scale between pixel- and model-space.
 type canvas struct {
 	img            *image.RGBA
 	modelRect      modelRectangle
 	xscale, yscale float64
 }
 
+// NewCanvas generates a canvas and calculates constants to scale between pixel- and model-space.
 func NewCanvas(w, h int, xmin, xmax, ymin, ymax float64) canvas {
 	m := image.NewRGBA(image.Rect(0, 0, w, h))
 	draw.Draw(m, m.Bounds(), &image.Uniform{defaultColor("white")}, image.ZP, draw.Src)
@@ -52,6 +56,7 @@ func NewCanvas(w, h int, xmin, xmax, ymin, ymax float64) canvas {
 	return canvas{m, mr, xscale, yscale}
 }
 
+// ExportToPNG writes a canvas to file.
 func (C *canvas) ExportToPNG(filename string) {
 	wd, err := os.Getwd()
 	if err != nil {
@@ -95,6 +100,7 @@ func (c *circle) At(x, y int) color.Color {
 	return color.Alpha{0}
 }
 
+// DrawCircleAt draws a circle on a canvas. x/y are in model-space, r is in pixel-space.
 func (C *canvas) DrawCircleAt(x, y float64, r int, fillColor color.RGBA) {
 	X, Y := int((x-C.modelRect.tl[0])*C.xscale), int((y-C.modelRect.tl[1])*C.yscale)
 	c := circle{image.Point{X, C.img.Bounds().Max.Y - Y}, r}
