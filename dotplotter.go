@@ -43,7 +43,7 @@ type canvas struct {
 // NewCanvas generates a canvas and calculates constants to scale between pixel- and model-space.
 func NewCanvas(w, h int, xmin, xmax, ymin, ymax float64) canvas {
 	m := image.NewRGBA(image.Rect(0, 0, w, h))
-	draw.Draw(m, m.Bounds(), &image.Uniform{defaultColor("white")}, image.ZP, draw.Src)
+	draw.Draw(m, m.Bounds(), &image.Uniform{DefaultColor("white")}, image.ZP, draw.Src)
 
 	mr := modelRectangle{[2]float64{xmin, ymin}, [2]float64{xmax, ymax}}
 
