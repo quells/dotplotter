@@ -77,6 +77,13 @@ func (C *canvas) ExportToPNG(filename string) {
 	}
 }
 
+// DrawCircleAt draws a circle on a canvas. x/y are in model-space, r is in pixel-space.
+func (C *canvas) DrawCircleAt(x, y float64, r int, fillColor color.RGBA) {
+	X, Y := int((x-C.modelRect.tl[0])*C.xscale), int((y-C.modelRect.tl[1])*C.yscale)
+	c := circle{image.Point{X, C.img.Bounds().Max.Y - Y}, r}
+	draw.DrawMask(C.img, C.img.Bounds(), &image.Uniform{fillColor}, image.ZP, &c, image.ZP, draw.Over)
+}
+
 // Circle logic from the Go blog:
 // https://blog.golang.org/go-imagedraw-package
 
@@ -99,11 +106,4 @@ func (c *circle) At(x, y int) color.Color {
 		return color.Alpha{255}
 	}
 	return color.Alpha{0}
-}
-
-// DrawCircleAt draws a circle on a canvas. x/y are in model-space, r is in pixel-space.
-func (C *canvas) DrawCircleAt(x, y float64, r int, fillColor color.RGBA) {
-	X, Y := int((x-C.modelRect.tl[0])*C.xscale), int((y-C.modelRect.tl[1])*C.yscale)
-	c := circle{image.Point{X, C.img.Bounds().Max.Y - Y}, r}
-	draw.DrawMask(C.img, C.img.Bounds(), &image.Uniform{fillColor}, image.ZP, &c, image.ZP, draw.Over)
 }
