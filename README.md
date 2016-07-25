@@ -15,6 +15,10 @@ A `map[string]color.RGBA` that provides RGB instances for common colors. Include
 
 Draws a dot of radius r on the canvas' image centered at the position (x, y) in *model-space* filled with fillColor. Positive x-y (quadrant I) is in the upper-right.
 
+`c.ExportToPNG("test.png")`
+
+Saves the image to the current working directory.
+
 ## Example
 
 ![example result](https://github.com/quells/dotplotter/blob/master/test.png)
